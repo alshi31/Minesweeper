@@ -67,19 +67,18 @@ public boolean isValid(int r, int c)
 public int countMines(int row, int col)
 {
   int numMines = 0;
-  int count = 0;
   for (int r = row-1; r <= row + 1; r++)
-   for (int c = col-1; c <= col + 1; c++)
-     if (isValidOn5by5(r, c) && buttons[r][c] == mines)
-       numMines++;
- if (buttons[row][col]==5)
-    count--;
+    for (int c = col-1; c <= col + 1; c++)
+      if (isValidOnRowbyCol(r, c) && mines.contains(buttons[r][c]))
+        numMines++;
+  if (mines.contains(buttons[row][col]))
+    numMines--;
   return numMines;
 }
-public boolean isValidOn5by5(int row, int col) {
+public boolean isValidOnRowbyCol(int row, int col) {
   if (row >= 0 && row < 5 && col >= 0 && col < 5)
-   return true;
- return false;
+    return true;
+  return false;
 }
 
 public class MSButton
@@ -106,7 +105,30 @@ public class MSButton
   public void mousePressed () 
   {
     clicked = true;
-    //your code here
+    if (mouseButton == RIGHT)
+    {
+      flagged=!flagged;
+      if (flagged == false)
+      {
+        clicked = false;
+      }
+    } 
+    else if (mines.contains(this))
+    {
+      displayLosingMessage();
+    } 
+    else if (countMines(myRow, myCol) > 0)
+    {
+      myLabel = countMines(myRow, myCol) + "";
+    }
+    else
+    {
+      if (isValidOnRowbyCol(myRow, myCol) && clicked == false)
+      {
+        
+        mousePressed();
+      }
+    }
   }
   public void draw () 
   {    

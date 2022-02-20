@@ -1,6 +1,6 @@
 import de.bezier.guido.*;
-public final static int NUM_ROWS = 5;
-public final static int NUM_COLS = 5;
+public final static int NUM_ROWS = 20;
+public final static int NUM_COLS = 20;
 public final static int NUM_MINES = 5;
 //public final static means that we cannot change that value while program is running
 private MSButton[][] buttons; //2d array of minesweeper buttons
@@ -76,7 +76,7 @@ public int countMines(int row, int col)
   return numMines;
 }
 public boolean isValidOnRowbyCol(int row, int col) {
-  if (row >= 0 && row < 5 && col >= 0 && col < 5)
+  if (row >= 0 && row < NUM_ROWS && col >= 0 && col < NUM_COLS)
     return true;
   return false;
 }
@@ -112,22 +112,43 @@ public class MSButton
       {
         clicked = false;
       }
-    } 
-    else if (mines.contains(this))
+    } else if (mines.contains(this))
     {
       displayLosingMessage();
-    } 
-    else if (countMines(myRow, myCol) > 0)
+    } else if (countMines(myRow, myCol) > 0)
     {
       myLabel = countMines(myRow, myCol) + "";
-    }
-    else
+    } else
     {
-      if (isValidOnRowbyCol(myRow, myCol) && clicked == false)
+      if (!isValidOnRowbyCol(myRow, myCol) && clicked == false)
       {
-        
-        mousePressed();
+        return;
       }
+      for(int i = -1; i <= 1; i++)
+      {
+        for (int j = -1; j <= -1; j++)
+        {
+          buttons[myRow+i][myCol+j].mousePressed();
+        }
+      }
+      /*
+        if (buttons[myRow+1][myCol].clicked == false);
+          buttons[myRow+1][myCol].mousePressed();
+        if (buttons[myRow][myCol-1].clicked == false)
+          buttons[myRow][myCol-1].mousePressed();
+        if (buttons[myRow-1][myCol].clicked == false)
+          buttons[myRow-1][myCol].mousePressed();
+        if (buttons[myRow][myCol+1].clicked == false)
+          buttons[myRow][myCol+1].mousePressed();
+        if (buttons[myRow+1][myCol+1].clicked == false)
+          buttons[myRow+1][myCol+1].mousePressed();
+        if (buttons[myRow-1][myCol-1].clicked == false)
+          buttons[myRow-1][myCol-1].mousePressed();
+        if (buttons[myRow-1][myCol+1].clicked == false)
+          buttons[myRow-1][myCol+1].mousePressed();
+        if (buttons[myRow+1][myCol-1].clicked == false)
+          buttons[myRow+1][myCol-1].mousePressed();
+          */
     }
   }
   public void draw () 

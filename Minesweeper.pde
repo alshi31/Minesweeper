@@ -1,7 +1,9 @@
 import de.bezier.guido.*;
 public final static int NUM_ROWS = 20;
 public final static int NUM_COLS = 20;
-public final static int NUM_MINES = 5;
+public final static int NUM_MINES = 50;
+private String[] Lost = {"Y", "O", "U", " ", "L", "O", "S", "E", "!"};
+private String[] Win = {"Y", "O", "U", " ", "W", "I", "N", "!"}; 
 //public final static means that we cannot change that value while program is running
 //Use numbers and rows as variables so that we can change them later, easily
 //Establishes how big the board is and how many mines there are
@@ -40,10 +42,9 @@ public void setMines()
     if (!mines.contains(buttons[row][col]))
     {
       mines.add(buttons[row][col]);
-      System.out.println(row + "," + col);
     }
     //makes sure that the mines do not overlap 
-    //if the mines is not at that specific button, add it to that button 
+    //if the mines is not at that specific button, add it to that button
   }
 }
 
@@ -55,16 +56,35 @@ public void draw ()
 }
 public boolean isWon()
 {
-  //your code here
+  int count = 0;
+  for (int row = 0; row < buttons.length; row++) {
+    for (int col = 0; col < buttons[row].length; col++)
+    {
+      if (buttons[row][col].clicked == true)
+        count++;
+    }
+  } 
+  if (count == ((NUM_COLS*NUM_COLS)-NUM_MINES))
+    return true;
   return false;
 }
 public void displayLosingMessage()
 {
-  //your code here
+  for (int row = 0; row < NUM_ROWS; row++)
+  {
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+      if (mines.contains(buttons[row][col]))
+        buttons[row][col].clicked = true;
+    }
+  }
+  for (int col = 5; col < 14; col++)
+    buttons[10][col].setLabel(Lost[(col-5) % Lost.length]);
 }
 public void displayWinningMessage()
 {
-  //your code here
+  for (int col = 6; col < 14; col++)
+    buttons[10][col].setLabel(Win[(col-6) % Win.length]);
 }
 public boolean isValid(int r, int c)
 {
@@ -93,7 +113,7 @@ public class MSButton
   private float x, y, width, height;
   private boolean clicked, flagged;
   private String myLabel;
-//declare variables before constructor
+  //declare variables before constructor
   public MSButton ( int row, int col )
   {
     width = 400/NUM_COLS;
@@ -105,7 +125,7 @@ public class MSButton
     myLabel = "";
     flagged = clicked = false;
     Interactive.add( this ); // register it with the manager
-    //constructor 
+    //constructor
   }
 
   // called by manager
@@ -115,12 +135,14 @@ public class MSButton
     if (mouseButton == RIGHT)
     {
       flagged=!flagged;
+      System.out.println(flagged);
       //returns the opposite of flagged
-      if (flagged == false)
+      if (mouseButton == RIGHT && flagged == false)
       {
         clicked = false;
       }
-    } else if (mines.contains(this))
+    } else if (mines.contains(this) && flagged == false)
+      //contains returns true or false if element is inside array list
     {
       displayLosingMessage();
     } 

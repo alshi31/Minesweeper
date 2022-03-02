@@ -135,7 +135,6 @@ public class MSButton
     if (mouseButton == RIGHT)
     {
       flagged=!flagged;
-      System.out.println(flagged);
       //returns the opposite of flagged
       if (mouseButton == RIGHT && flagged == false)
       {
